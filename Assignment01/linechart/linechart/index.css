@@ -8,4 +8,8 @@
 /* TASK 2: Add a CSS rule which adds a blue color to the rain line */
 
 /* TASK 3: Add a CSS rule which centers the text of all elements in the <div> containing the header elements */
-
+#averages-germany {
+  margin: 0 auto;
+  width: 50%;
+  text-align: center;
+  }
