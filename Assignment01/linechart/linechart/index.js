@@ -118,6 +118,18 @@ TASK 6: Transform the data points to their respective screen coordinates.
 3. Add the resulting transformed point to the 'transformedPoints' array
 */
 
+avgDataPerYear.forEach(element => {
+  let transformedTemperature = minTemp + element.temperature;
+  let transformedPrecipitation = minRain + element.rain;
+
+  transformedPoints.push({
+    year: element.year,
+    temperature: transformedTemperature,
+    rain: transformedPrecipitation
+  });
+});
+
+console.log(transformedPoints);
 /*
 TASK 7: Add the points to the screen
 1. Use a loop to iterate through the 'transformedPoints' array
