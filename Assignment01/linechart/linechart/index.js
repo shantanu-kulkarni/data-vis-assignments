@@ -20,6 +20,8 @@ const svgNamespace = "http://www.w3.org/2000/svg";
 
 /* TASK 1: Retrieve the node of the div element declared within the index.html by its identifier and save it to a variable that we will use later */
 
+const node = document.getElementById("averages-graph");
+
 // Specify margins such that the visualization is clearly visible and no elements are invisible due to the svg border
 const margins = {
   top: 20,
@@ -35,7 +37,8 @@ const visWidth = width - margins.left - margins.right;
 const visHeight = height - margins.top - margins.bottom;
 
 /* TASK 2: Create an svg element, set its width and height in pixels (via the 'element.style' attribute), and add it to the vis-container. Save the svg element in a variable called 'svg' */
-
+var svg = document.getElementById("averages-graph");
+console.log(svg);
 // We add a group element to the svg to set the margin by translating the group.
 // All visual elements which are part of the line-chart need to be added to the group.
 const visG = document.createElementNS(svgNamespace, "g");
@@ -47,6 +50,7 @@ svg.appendChild(visG);
 const transformedPoints = [];
 const maxYear = getMaxFromArrayOfObjects("Year", data);
 const minYear = getMinFromArrayOfObjects("Year", data);
+console.log(maxYear + "YEAR" + minYear);
 const pixelsPerYear = visWidth / (maxYear - minYear + 1);
 
 /** TASK 4: Create a <h2> element and add it to the header div containing the <h1> element.
@@ -54,7 +58,10 @@ const pixelsPerYear = visWidth / (maxYear - minYear + 1);
  * The text of the <h2> element should be `From the years <minyear> to <maxyear>`
  * <minyear> and <maxyear> should be replaced with the real values from line 49 and 50.
  */
-
+const h1 = document.getElementById("averages-germany");
+let h2 = document.createElement("h2");
+h2.textContent = "From the years " + minYear + " to " + maxYear;
+h1.appendChild(h2);
 // Data Preparation: For each year we want the average rain and temperature
 // We intialize an empty array 'avgData' which will hold the average values and the respective years
 const avgDataPerYear = [];
@@ -69,6 +76,8 @@ for (i = 0; i < maxYear - minYear + 1; i++) {
    *    rain: 0,
    * });
    */
+  console.log(ele);
+  console.log(data.map(ele => ele.Year == data[i]));
 }
 
 // Check the browser console to see how the data looks like
@@ -107,12 +116,12 @@ TASK 8: Add lines to the visualization. Use polylines to connect the previously 
 /* Helper function to retrieve important statistics */
 function getMaxFromArrayOfObjects(attributeName, arrOfObjects) {
   /** TASK 3.1: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
-
+  let max = Math.max(...arrOfObjects.map(ele => ele.Year)); 
   return max;
 }
 
 function getMinFromArrayOfObjects(attributeName, arrOfObjects) {
   /* TASK 3.2: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
-
+  let min = Math.min(...arrOfObjects.map(ele => ele.Year));
   return min;
 }
