@@ -76,7 +76,9 @@ for (i = 0; i < maxYear - minYear + 1; i++) {
    *    rain: 0,
    * });
    */
-  
+  // Shantanu : Ideally can use reduce as well here but as per the instructions
+  // this implementation is done
+
   let currentYear = minYear + i;
   let currentYearTemperature = 0;
   let currentYearPrecipitation = 0;
@@ -107,7 +109,8 @@ const maxTemp = getMaxFromArrayOfObjects("temperature", avgDataPerYear);
 const minTemp = getMinFromArrayOfObjects("temperature", avgDataPerYear);
 const minRain = 0;
 const maxRain = getMaxFromArrayOfObjects("rain", avgDataPerYear);
-
+console.log(data);
+console.log(minTemp);
 /*
 TASK 6: Transform the data points to their respective screen coordinates.
 1. Use a loop to iterate through the 'avgDataPerYear' array
@@ -135,12 +138,13 @@ TASK 8: Add lines to the visualization. Use polylines to connect the previously 
 /* Helper function to retrieve important statistics */
 function getMaxFromArrayOfObjects(attributeName, arrOfObjects) {
   /** TASK 3.1: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
-  let max = Math.max(...arrOfObjects.map(ele => ele.Year)); 
+  let max = Math.max(...arrOfObjects.map(ele => ele[attributeName])); 
   return max;
 }
 
 function getMinFromArrayOfObjects(attributeName, arrOfObjects) {
   /* TASK 3.2: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
-  let min = Math.min(...arrOfObjects.map(ele => ele.Year));
+  //let attr = attributeName;
+  let min = Math.min(...arrOfObjects.map(ele => ele[attributeName]));
   return min;
 }
