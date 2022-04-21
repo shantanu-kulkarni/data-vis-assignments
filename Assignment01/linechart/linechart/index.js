@@ -76,8 +76,27 @@ for (i = 0; i < maxYear - minYear + 1; i++) {
    *    rain: 0,
    * });
    */
-  console.log(ele);
-  console.log(data.map(ele => ele.Year == data[i]));
+  
+  let currentYear = minYear + i;
+  let currentYearTemperature = 0;
+  let currentYearPrecipitation = 0;
+
+  data.forEach(element => {
+    if (element.Year === currentYear) {
+      currentYearTemperature = + element.tas;
+      currentYearPrecipitation = + element.pr;
+    }
+  });
+
+  console.log(currentYear);
+  console.log(currentYearTemperature);
+  console.log(currentYearPrecipitation);
+
+  avgDataPerYear.push({
+    year: currentYear,
+    temperature: currentYearTemperature,
+    rain: currentYearPrecipitation
+  });
 }
 
 // Check the browser console to see how the data looks like
