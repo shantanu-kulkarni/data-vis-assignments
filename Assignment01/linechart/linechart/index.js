@@ -37,13 +37,21 @@ const visWidth = width - margins.left - margins.right;
 const visHeight = height - margins.top - margins.bottom;
 
 /* TASK 2: Create an svg element, set its width and height in pixels (via the 'element.style' attribute), and add it to the vis-container. Save the svg element in a variable called 'svg' */
-var svg = document.getElementById("averages-graph");
-console.log(svg);
 // We add a group element to the svg to set the margin by translating the group.
 // All visual elements which are part of the line-chart need to be added to the group.
-const visG = document.createElementNS(svgNamespace, "g");
+/*const visG = document.createElementNS(svgNamespace, "g");
 visG.setAttribute("transform", "translate(" + margins.left + "," + margins.top + ")");
-svg.appendChild(visG);
+svg.appendChild(visG);*/
+
+const svgElement = document.createElementNS(svgNamespace, "svg")
+svgElement.setAttribute('style', 'width: ' + width + '; height: ' + height);
+node.appendChild(svgElement);
+
+// We add a group element to the svg to set the margin by translating the group.
+// All visual elements which are part of the line-chart need to be added to the group.
+const visG = document.createElementNS(svgNamespace, "svg");
+visG.setAttribute("transform", "translate(" + margins.left + "," + margins.top + ")");
+svgElement.appendChild(visG);
 
 // Initialization of an array which will hold the respective coordinates on the screen
 /* TASK 3: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
@@ -118,17 +126,19 @@ TASK 6: Transform the data points to their respective screen coordinates.
 3. Add the resulting transformed point to the 'transformedPoints' array
 */
 
-avgDataPerYear.forEach(element => {
-  let transformedTemperature = minTemp + element.temperature;
-  let transformedPrecipitation = minRain + element.rain;
+avgDataPerYear.forEach((element, index) => {
+  let transformedTemperatureY = (visHeight + ((maxTemp - minTemp) / visHeight) * element.temperature)/2; 
+  let transformedPrecipitationY = (visHeight + ((maxRain - minRain) / visHeight) * element.rain)/2; 
+  let transformedX = index * pixelsPerYear;
 
   transformedPoints.push({
-    year: element.year,
-    temperature: transformedTemperature,
-    rain: transformedPrecipitation
+    xTransform: transformedX,
+    yRainTransform: transformedPrecipitationY,
+    yTemperatureTransform: transformedTemperatureY,
   });
 });
 
+console.log("PRINT TRANSFORMED POINTS:");
 console.log(transformedPoints);
 /*
 TASK 7: Add the points to the screen
@@ -139,6 +149,23 @@ TASK 7: Add the points to the screen
     - Add them to the visG group
  */
 
+transformedPoints.forEach(element => {
+
+  var pointRain = document.createElementNS(svgNamespace, 'circle');
+  var pointTemperature = document.createElementNS(svgNamespace, 'circle');
+  pointRain.setAttributeNS(null, 'cx', element.xTransform);
+  pointRain.setAttributeNS(null, 'cy', element.yRainTransform);
+  pointRain.setAttributeNS(null, 'r', 3);
+
+  pointTemperature.setAttributeNS(null, 'cx', element.xTransform);
+  pointTemperature.setAttributeNS(null, 'cy', element.transformedTemperatureY);
+  pointTemperature.setAttributeNS(null, 'r', 3);
+
+  visG.appendChild(pointRain);
+  visG.appendChild(pointTemperature);
+});
+
+console.log(visG);
 /*
 TASK 8: Add lines to the visualization. Use polylines to connect the previously created points.
 1. Create an element "polyline" for temperature and rain
