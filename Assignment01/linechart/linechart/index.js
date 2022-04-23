@@ -21,6 +21,7 @@ const svgNamespace = "http://www.w3.org/2000/svg";
 /* TASK 1: Retrieve the node of the div element declared within the index.html by its identifier and save it to a variable that we will use later */
 
 const node = document.getElementById("averages-graph");
+const h1 = document.getElementById("averages-germany");
 
 // Specify margins such that the visualization is clearly visible and no elements are invisible due to the svg border
 const margins = {
@@ -42,9 +43,13 @@ Save the svg element in a variable called 'svg' */
 // All visual elements which are part of the line-chart need to be added to the group.
 
 const svg = document.createElementNS(svgNamespace, "svg");
-svg.setAttribute('style', 'width: ' + width + '; height: ' + height);
+svg.setAttribute("style", "width: " + width + "; height: " + height);
+
 const visG = document.createElementNS(svgNamespace, "g");
-visG.setAttribute("transform", "translate(" + margins.left + "," + margins.top + ")");
+visG.setAttribute(
+  "transform",
+  "translate(" + margins.left + "," + margins.top + ")"
+);
 svg.appendChild(visG);
 node.appendChild(svg);
 
@@ -55,7 +60,7 @@ const transformedPoints = [];
 const maxYear = getMaxFromArrayOfObjects("Year", data);
 const minYear = getMinFromArrayOfObjects("Year", data);
 
-console.log(maxYear + "YEAR" + minYear);
+//console.log(maxYear + "YEAR" + minYear);
 const pixelsPerYear = visWidth / (maxYear - minYear + 1);
 
 /** TASK 4: Create a <h2> element and add it to the header div containing the <h1> element.
@@ -64,7 +69,6 @@ const pixelsPerYear = visWidth / (maxYear - minYear + 1);
  * <minyear> and <maxyear> should be replaced with the real values from line 49 and 50.
  */
 
-const h1 = document.getElementById("averages-germany");
 let h2 = document.createElement("h2");
 h2.textContent = "From the years " + minYear + " to " + maxYear;
 h1.appendChild(h2);
@@ -90,20 +94,20 @@ for (i = 0; i < maxYear - minYear + 1; i++) {
   let currentYearPrecipitation = 0;
   let c = 0;
 
-  data.forEach(element => {
+  data.forEach((element) => {
     if (element.Year == currentYear) {
-        currentYearTemperature += element.tas;
-        currentYearPrecipitation += element.pr;
-        c=+1;
+      currentYearTemperature += element.tas;
+      currentYearPrecipitation += element.pr;
+      c = +1;
     }
   });
 
-  currentYearTemperature /= c
-  currentYearPrecipitation /= c
+  currentYearTemperature /= c;
+  currentYearPrecipitation /= c;
   avgDataPerYear.push({
     year: currentYear,
     temperature: currentYearTemperature,
-    rain: currentYearPrecipitation
+    rain: currentYearPrecipitation,
   });
 }
 
@@ -115,8 +119,9 @@ const maxTemp = getMaxFromArrayOfObjects("temperature", avgDataPerYear);
 const minTemp = getMinFromArrayOfObjects("temperature", avgDataPerYear);
 const minRain = 0;
 const maxRain = getMaxFromArrayOfObjects("rain", avgDataPerYear);
-console.log(data);
-console.log(maxRain);
+
+//console.log(data);
+//console.log(maxRain);
 /*
 TASK 6: Transform the data points to their respective screen coordinates.
 1. Use a loop to iterate through the 'avgDataPerYear' array
@@ -125,11 +130,15 @@ TASK 6: Transform the data points to their respective screen coordinates.
 */
 
 avgDataPerYear.forEach((element, index) => {
-
-  console.log("VIS HEIGHT>>>"+((visHeight/(maxTemp - minTemp)) * element.temperature));
-  let transformedTemperatureY = (visHeight - ((visHeight / (maxTemp - minTemp)) * element.temperature - ((minTemp*visHeight) / (maxTemp - minTemp))))/2; 
-  let transformedPrecipitationY = (visHeight - ((visHeight / (maxRain - minRain)) * element.rain))/2; 
-  let transformedX = (index * pixelsPerYear);
+  //console.log("VIS HEIGHT>>>" + ((visHeight / (maxTemp - minTemp)) * element.temperature));
+  let transformedTemperatureY =
+    (visHeight -
+      ((visHeight / (maxTemp - minTemp)) * element.temperature -
+        (minTemp * visHeight) / (maxTemp - minTemp))) /
+    2;
+  let transformedPrecipitationY =
+    (visHeight - (visHeight / (maxRain - minRain)) * element.rain) / 2;
+  let transformedX = index * pixelsPerYear;
 
   transformedPoints.push({
     xTransform: transformedX,
@@ -149,23 +158,23 @@ TASK 7: Add the points to the screen
     - Add them to the visG group
  */
 
-transformedPoints.forEach(element => {
+transformedPoints.forEach((element) => {
+  var pointRain = document.createElementNS(svgNamespace, "circle");
+  var pointTemperature = document.createElementNS(svgNamespace, "circle");
 
-  var pointRain = document.createElementNS(svgNamespace, 'circle');
-  var pointTemperature = document.createElementNS(svgNamespace, 'circle');
-  pointRain.setAttributeNS(null, 'cx', element.xTransform);
-  pointRain.setAttributeNS(null, 'cy', element.yRainTransform);
-  pointRain.setAttributeNS(null, 'r', 2);
+  pointRain.setAttributeNS(null, "cx", element.xTransform);
+  pointRain.setAttributeNS(null, "cy", element.yRainTransform);
+  pointRain.setAttributeNS(null, "r", 2);
 
-  pointTemperature.setAttributeNS(null, 'cx', element.xTransform);
-  pointTemperature.setAttributeNS(null, 'cy', element.yTemperatureTransform);
-  pointTemperature.setAttributeNS(null, 'r', 2);
+  pointTemperature.setAttributeNS(null, "cx", element.xTransform);
+  pointTemperature.setAttributeNS(null, "cy", element.yTemperatureTransform);
+  pointTemperature.setAttributeNS(null, "r", 2);
 
   visG.appendChild(pointRain);
   visG.appendChild(pointTemperature);
 });
 
-console.log(visG);
+//console.log(visG);
 /*
 TASK 8: Add lines to the visualization. Use polylines to connect the previously created points.
 1. Create an element "polyline" for temperature and rain
@@ -174,13 +183,27 @@ TASK 8: Add lines to the visualization. Use polylines to connect the previously 
 3. Add the polyline to visG group
 */
 
-var lineRain = document.createElementNS(svgNamespace, 'polyline');
-lineRain.setAttribute('id', 'rain-graph');
-lineRain.setAttributeNS(null, 'points', transformedPoints.map(element => [element.xTransform, element.yRainTransform]));
+var lineRain = document.createElementNS(svgNamespace, "polyline");
+lineRain.setAttribute("id", "rain-graph");
+lineRain.setAttributeNS(
+  null,
+  "points",
+  transformedPoints.map((element) => [
+    element.xTransform,
+    element.yRainTransform,
+  ])
+);
 
-var lineTemperature = document.createElementNS(svgNamespace, 'polyline');
-lineTemperature.setAttribute('id', 'temperature-graph');
-lineTemperature.setAttributeNS(null, 'points', transformedPoints.map(element =>[element.xTransform, element.yTemperatureTransform]));
+var lineTemperature = document.createElementNS(svgNamespace, "polyline");
+lineTemperature.setAttribute("id", "temperature-graph");
+lineTemperature.setAttributeNS(
+  null,
+  "points",
+  transformedPoints.map((element) => [
+    element.xTransform,
+    element.yTemperatureTransform,
+  ])
+);
 
 visG.appendChild(lineRain);
 visG.appendChild(lineTemperature);
@@ -188,13 +211,12 @@ visG.appendChild(lineTemperature);
 /* Helper function to retrieve important statistics */
 function getMaxFromArrayOfObjects(attributeName, arrOfObjects) {
   /** TASK 3.1: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
-  let max = Math.max(...arrOfObjects.map(ele => ele[attributeName])); 
+  let max = Math.max(...arrOfObjects.map((ele) => ele[attributeName]));
   return max;
 }
 
 function getMinFromArrayOfObjects(attributeName, arrOfObjects) {
   /* TASK 3.2: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
-  //let attr = attributeName;
-  let min = Math.min(...arrOfObjects.map(ele => ele[attributeName]));
+  let min = Math.min(...arrOfObjects.map((ele) => ele[attributeName]));
   return min;
 }
