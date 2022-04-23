@@ -6,13 +6,13 @@
 /* TASK 1: Add a CSS rule which adds a red color to the temperature line */
 #temperature-graph{
   fill: none;
-  stroke: blue;
+  stroke: red;
   stroke-width: 2;
 }
 /* TASK 2: Add a CSS rule which adds a blue color to the rain line */
 #rain-graph{
   fill: none;
-  stroke: red;
+  stroke: blue;
   stroke-width: 2;
 }
 /* TASK 3: Add a CSS rule which centers the text of all elements in the <div> containing the header elements */

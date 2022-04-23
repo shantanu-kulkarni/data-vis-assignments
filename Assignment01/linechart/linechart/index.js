@@ -126,10 +126,9 @@ TASK 6: Transform the data points to their respective screen coordinates.
 
 avgDataPerYear.forEach((element, index) => {
 
-  console.log((maxRain - minRain));
-  //console.log("visHeight:"+visHeight+" Ratio 1:"+ (visHeight / (maxTemp - minTemp)) * element.temperature + " Ratio 2:"+((minTemp*visHeight) / (maxTemp - minTemp)));
-  let transformedTemperatureY = (visHeight - (((maxTemp - minTemp)/visHeight)) * element.temperature); //(visHeight - ((visHeight / (maxTemp - minTemp)) * element.temperature - ((minTemp*visHeight) / (maxTemp - minTemp))))/2; 
-  let transformedPrecipitationY = (visHeight - ((visHeight / (maxRain - minRain)) * element.rain - ((minRain*visHeight) / (maxRain - minRain))))/2; 
+  console.log("VIS HEIGHT>>>"+((visHeight/(maxTemp - minTemp)) * element.temperature));
+  let transformedTemperatureY = (visHeight - ((visHeight / (maxTemp - minTemp)) * element.temperature - ((minTemp*visHeight) / (maxTemp - minTemp))))/2; 
+  let transformedPrecipitationY = (visHeight - ((visHeight / (maxRain - minRain)) * element.rain))/2; 
   let transformedX = (index * pixelsPerYear);
 
   transformedPoints.push({
@@ -176,11 +175,11 @@ TASK 8: Add lines to the visualization. Use polylines to connect the previously 
 */
 
 var lineRain = document.createElementNS(svgNamespace, 'polyline');
-lineRain.setAttribute('id', 'temperature-graph');
+lineRain.setAttribute('id', 'rain-graph');
 lineRain.setAttributeNS(null, 'points', transformedPoints.map(element => [element.xTransform, element.yRainTransform]));
 
 var lineTemperature = document.createElementNS(svgNamespace, 'polyline');
-lineTemperature.setAttribute('id', 'rain-graph');
+lineTemperature.setAttribute('id', 'temperature-graph');
 lineTemperature.setAttributeNS(null, 'points', transformedPoints.map(element =>[element.xTransform, element.yTemperatureTransform]));
 
 visG.appendChild(lineRain);
